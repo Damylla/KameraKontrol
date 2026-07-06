@@ -1,0 +1,284 @@
+/* ---------- RESET ---------- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+    background: #f5f5f7;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+/* ---------- APPLE KART ---------- */
+.apple-card {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-radius: 20px;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    padding: 24px;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+    .apple-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
+    }
+
+/* ---------- APPLE BUTON ---------- */
+.apple-button {
+    background: #007aff;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: -apple-system, 'SF Pro Display', sans-serif;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+}
+
+    .apple-button:hover {
+        background: #0066d9;
+        transform: scale(0.98);
+    }
+
+    .apple-button:active {
+        transform: scale(0.95);
+    }
+
+.apple-button-secondary {
+    background: #e5e5ea;
+    color: #1c1c1e;
+}
+
+    .apple-button-secondary:hover {
+        background: #d1d1d6;
+    }
+
+.apple-button-purple {
+    background: #af52de;
+}
+
+    .apple-button-purple:hover {
+        background: #8e44ad;
+    }
+
+/* ---------- APPLE GRID ---------- */
+.apple-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 24px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    .apple-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ---------- KAMERA ---------- */
+.camera-container {
+    background: #000;
+    border-radius: 16px;
+    overflow: hidden;
+    aspect-ratio: 16/9;
+    position: relative;
+}
+
+    .camera-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+/* ---------- SAYI GÖSTERGESİ ---------- */
+.apple-number {
+    font-size: 64px;
+    font-weight: 700;
+    font-family: -apple-system, 'SF Pro Display', sans-serif;
+    letter-spacing: -2px;
+}
+
+    .apple-number.green {
+        color: #34c759;
+    }
+
+    .apple-number.blue {
+        color: #007aff;
+    }
+
+/* ---------- APPLE BADGE ---------- */
+.apple-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #e5e5ea;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #1c1c1e;
+}
+
+    .apple-badge.green {
+        background: #34c759;
+        color: white;
+    }
+
+    .apple-badge.blue {
+        background: #007aff;
+        color: white;
+    }
+
+    .apple-badge.purple {
+        background: #af52de;
+        color: white;
+    }
+
+    .apple-badge.gold {
+        background: #ffd60a;
+        color: #1c1c1e;
+    }
+
+/* ---------- TERMINAL ---------- */
+.apple-terminal {
+    background: #1c1c1e;
+    border-radius: 12px;
+    padding: 16px;
+    font-family: 'SF Mono', monospace;
+    font-size: 13px;
+    color: #34c759;
+    min-height: 80px;
+    overflow: hidden;
+}
+
+    .apple-terminal .log {
+        color: #64d2ff;
+    }
+
+/* ---------- HEADER ---------- */
+.apple-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    max-width: 1400px;
+    margin: 0 auto 24px auto;
+}
+
+    .apple-header h1 {
+        font-size: 32px;
+        font-weight: 700;
+        background: linear-gradient(135deg, #1c1c1e, #007aff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+.apple-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #e5e5ea;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #1c1c1e;
+}
+
+    .apple-status .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #34c759;
+        animation: pulse 1.5s ease-in-out infinite;
+    }
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: scale(0.8);
+    }
+}
+
+/* ---------- BUTON GRID ---------- */
+.button-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+/* ---------- STATUS GRID ---------- */
+.status-grid-apple {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+@media (max-width: 480px) {
+    .status-grid-apple {
+        grid-template-columns: 1fr;
+    }
+}
+
+.status-item {
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+    .status-item .label {
+        font-size: 13px;
+        color: #8e8e93;
+        font-weight: 500;
+    }
+
+    .status-item .value {
+        font-size: 14px;
+        font-weight: 600;
+        margin-left: auto;
+    }
+
+/* ---------- MOBIL ---------- */
+@media (max-width: 480px) {
+    .apple-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+        .apple-header h1 {
+            font-size: 24px;
+        }
+
+    .apple-number {
+        font-size: 48px;
+    }
+
+    .button-grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Human Detection System</title>
+
+    <link href="https://fonts.cdnfonts.com/css/sf-pro-display" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cupertino.css/dist/cupertino.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+            background: #f5f5f7;
+            padding: 16px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .dashboard {
+            max-width: 1440px;
+            width: 100%;
+        }
+
+        /* HEADER */
+        .apple-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0 20px 0;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+            .apple-header h1 {
+                font-size: 28px;
+                font-weight: 700;
+                background: linear-gradient(135deg, #1c1c1e, #007aff);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+
+        .apple-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #e5e5ea;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1c1c1e;
+        }
+
+            .apple-status .dot {
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                background: #34c759;
+                animation: pulse 1.5s ease-in-out infinite;
+            }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.5;
+                transform: scale(0.8);
+            }
+        }
+
+        /* GRID - Kamera Daha Büyük */
+        .apple-grid {
+            display: grid;
+            grid-template-columns: 1.8fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 900px) {
+            .apple-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* KARTLAR */
+        .apple-card {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            border-radius: 20px;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            padding: 20px 24px;
+            transition: all 0.3s ease;
+        }
+
+            .apple-card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
+            }
+
+        /* KAMERA - BÜYÜK */
+        .camera-container {
+            background: #000;
+            border-radius: 16px;
+            overflow: hidden;
+            aspect-ratio: 16/9;
+            position: relative;
+            width: 100%;
+        }
+
+            .camera-container img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                display: block;
+            }
+
+        .camera-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+            .camera-header .badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                background: #34c759;
+                padding: 4px 14px;
+                border-radius: 20px;
+                font-size: 13px;
+                font-weight: 600;
+                color: white;
+            }
+
+            .camera-header .fps {
+                font-size: 14px;
+                font-weight: 600;
+                color: #8e8e93;
+            }
+
+        .camera-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #8e8e93;
+        }
+
+        /* SAYILAR */
+        .apple-number {
+            font-size: 56px;
+            font-weight: 700;
+            font-family: -apple-system, 'SF Pro Display', sans-serif;
+            letter-spacing: -2px;
+        }
+
+            .apple-number.blue {
+                color: #007aff;
+            }
+
+            .apple-number.green {
+                color: #34c759;
+            }
+
+        /* STATUS GRID - 4 KART */
+        .status-grid-apple {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .status-item {
+            padding: 14px 16px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+            .status-item .label {
+                font-size: 13px;
+                color: #8e8e93;
+                font-weight: 500;
+            }
+
+            .status-item .value {
+                font-size: 15px;
+                font-weight: 600;
+                margin-left: auto;
+            }
+
+        /* BUTONLAR */
+        .button-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .apple-button {
+            background: #007aff;
+            color: white;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: -apple-system, 'SF Pro Display', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+            .apple-button:hover {
+                background: #0066d9;
+                transform: scale(0.98);
+            }
+
+        .apple-button-secondary {
+            background: #e5e5ea;
+            color: #1c1c1e;
+        }
+
+            .apple-button-secondary:hover {
+                background: #d1d1d6;
+            }
+
+        .apple-button-purple {
+            background: #af52de;
+        }
+
+            .apple-button-purple:hover {
+                background: #8e44ad;
+            }
+
+        /* TERMINAL */
+        .apple-terminal {
+            background: #1c1c1e;
+            border-radius: 12px;
+            padding: 14px 18px;
+            font-family: 'SF Mono', monospace;
+            font-size: 14px;
+            color: #34c759;
+            min-height: 60px;
+            overflow: hidden;
+        }
+
+            .apple-terminal .log {
+                color: #64d2ff;
+            }
+
+        /* LAYOUT İÇİ BOŞLUK */
+        .mt-16 {
+            margin-top: 16px;
+        }
+
+        .mt-12 {
+            margin-top: 12px;
+        }
+
+        /* LIVE STATS - 2 KART */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .stat-box {
+            background: #f5f5f7;
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+
+            .stat-box .stat-label {
+                font-size: 13px;
+                color: #8e8e93;
+                font-weight: 500;
+            }
+
+            .stat-box .stat-number {
+                font-size: 32px;
+                font-weight: 700;
+                color: #1c1c1e;
+            }
+
+                .stat-box .stat-number.blue {
+                    color: #007aff;
+                }
+
+        /* RESPONSIVE */
+        @media (max-width: 600px) {
+            .apple-header h1 {
+                font-size: 20px;
+            }
+
+            .apple-number {
+                font-size: 40px;
+            }
+
+            .button-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .status-grid-apple {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .apple-card {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard">
+
+        <!-- HEADER -->
+        <div class="apple-header">
+            <h1> Human Detection System</h1>
+            <div class="apple-status">
+                <span class="dot"></span>
+                <span>System Active</span>
+            </div>
+        </div>
+
+        <!-- ANA GRID -->
+        <div class="apple-grid">
+
+            <!-- SOL: KAMERA + TOTAL -->
+            <div>
+
+                <!-- KAMERA KARTI -->
+                <div class="apple-card">
+                    <div class="camera-header">
+                        <div>
+                            <span class="badge">📹 Atech USB</span>
+                            <span class="badge" style="background:#007aff; margin-left:6px;">LIVE</span>
+                        </div>
+                        <span class="fps" id="camera-fps">60 FPS</span>
+                    </div>
+                    <div class="camera-container">
+                        <img id="videoFeed" src="{{ url_for('video_feed') }}" alt="Camera feed">
+                    </div>
+                    <div class="camera-footer">
+                        <span id="camera-timestamp"> 2026-06-30 13:16:03</span>
+                        <span>1920x1080</span>
+                    </div>
+                </div>
+
+                <!-- TOTAL PEOPLE -->
+                <div class="apple-card mt-16" style="text-align:center;">
+                    <div style="font-size:16px; font-weight:600; color:#8e8e93;"> Total People</div>
+                    <div class="apple-number blue" id="people-counter">0</div>
+                    <div style="font-size:14px; color:#8e8e93; margin-top:4px;" id="last-update">Last update: 13:16:03</div>
+                </div>
+
+            </div>
+
+            <!-- SAĞ: STATUS + BUTONLAR + TERMINAL + STATS -->
+            <div>
+
+                <!-- SYSTEM STATUS -->
+                <div class="apple-card">
+                    <div style="font-weight:600; font-size:16px; margin-bottom:14px; color:#1c1c1e;"> System Status</div>
+                    <div class="status-grid-apple">
+                        <div class="status-item">
+                            <span style="font-size:18px;"></span>
+                            <div>
+                                <div class="label">Atech USB</div>
+                                <div class="value" style="color:#34c759;" id="usb-status"> Connected</div>
+                            </div>
+                        </div>
+                        <div class="status-item">
+                            <span style="font-size:18px;"></span>
+                            <div>
+                                <div class="label">YOLO Model</div>
+                                <div class="value" style="color:#34c759;" id="yolo-status"> Loaded</div>
+                            </div>
+                        </div>
+                        <div class="status-item">
+                            <span style="font-size:18px;"></span>
+                            <div>
+                                <div class="label">Data Stream</div>
+                                <div class="value" style="color:#34c759;" id="stream-status"> 30 FPS</div>
+                            </div>
+                        </div>
+                        <div class="status-item">
+                            <span style="font-size:18px;"></span>
+                            <div>
+                                <div class="label">GPU Usage</div>
+                                <div class="value" style="color:#ffd60a;" id="gpu-status"> 53%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BUTTONS -->
+                <div class="apple-card mt-16">
+                    <div style="font-weight:600; font-size:15px; margin-bottom:10px; color:#1c1c1e;"> Quick Actions</div>
+                    <div class="button-grid">
+                        <button class="apple-button apple-button-purple" id="btn-deep-think"> Deep Analysis</button>
+                        <button class="apple-button" id="btn-smart-search"> Target Tracking</button>
+                        <button class="apple-button apple-button-secondary" id="btn-export"> Export Report</button>
+                        <button class="apple-button" style="background:#ff9500;" id="btn-screenshot"> Screenshot</button>
+                    </div>
+                </div>
+
+                <!-- TERMINAL -->
+                <div class="apple-card mt-16">
+                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+                        <span style="font-weight:600; color:#1c1c1e;"> Terminal</span>
+                    </div>
+                    <div class="apple-terminal">
+                        <div class="log" id="terminal-log">> [SYSTEM] YOLO Human Detection System initializing...</div>
+                    </div>
+                </div>
+
+                <!-- LIVE STATISTICS -->
+                <div class="apple-card mt-16">
+                    <div style="font-weight:600; font-size:15px; margin-bottom:10px; color:#1c1c1e;"> Live Statistics</div>
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <div class="stat-label">Today's Visitors</div>
+                            <div class="stat-number" id="today-count">44</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Current Density</div>
+                            <div class="stat-number blue" id="current-count">0</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
